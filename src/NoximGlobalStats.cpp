@@ -51,21 +51,21 @@ double NoximGlobalStats::getAverageDelay()
 						}
 				}
 	/****************MODIFY BY HUI-SHUN********************/
-	
+
     return avg_delay/(double)total_packets;
 }
 /****************MODIFY BY HUI-SHUN********************/
 vector<double>  NoximGlobalStats::getLayerAverageDelay()
-{ 
+{
 
   vector<double>   avg_delay;
   vector<double>   received_packets;
   vector<double>  total_packets;
 	int x,y,z;
-	avg_delay.resize(NoximGlobalParams::mesh_dim_z); 
-	received_packets.resize(NoximGlobalParams::mesh_dim_z); 
-	total_packets.resize(NoximGlobalParams::mesh_dim_z); 
-	for ( z=0; z<NoximGlobalParams::mesh_dim_z; z++)  
+	avg_delay.resize(NoximGlobalParams::mesh_dim_z);
+	received_packets.resize(NoximGlobalParams::mesh_dim_z);
+	total_packets.resize(NoximGlobalParams::mesh_dim_z);
+	for ( z=0; z<NoximGlobalParams::mesh_dim_z; z++)
 		for ( y=0; y<NoximGlobalParams::mesh_dim_y; y++)
 			for ( x=0; x<NoximGlobalParams::mesh_dim_x; x++){
 				received_packets[z] = noc->t[x][y][z]->r->stats.getReceivedPackets(); ////
@@ -74,10 +74,10 @@ vector<double>  NoximGlobalStats::getLayerAverageDelay()
 					total_packets[z] += received_packets[z];
 				}
 			}
-	for ( z = 0 ; z<NoximGlobalParams::mesh_dim_z; z++)  
+	for ( z = 0 ; z<NoximGlobalParams::mesh_dim_z; z++)
 		avg_delay[z] /= (double)total_packets[z];
 
-return avg_delay;  
+return avg_delay;
 }
 /****************MODIFY BY HUI-SHUN********************/
 
@@ -113,7 +113,7 @@ double NoximGlobalStats::getMaxDelay()
 				NoximCoord coord;
 				coord.x = x;
 				coord.y = y;
-				coord.z = z; 
+				coord.z = z;
 				node_id = coord2Id(coord);
 				d = getMaxDelay(node_id);
 				if (d > maxd)
@@ -331,105 +331,111 @@ double NoximGlobalStats::getPower()
 	for( z=0; z<NoximGlobalParams::mesh_dim_z; z++)////
 		for( y=0; y<NoximGlobalParams::mesh_dim_y; y++)
 			for( x=0; x<NoximGlobalParams::mesh_dim_x; x++)
-				power += noc->t[x][y][z]->r->getPower();  ////	
+				power += noc->t[x][y][z]->r->getPower();  ////
 	/****************MODIFY BY HUI-SHUN********************/
     return power;
 }
 /****************MODIFY BY HUI-SHUN********************/
 vector<double>  NoximGlobalStats::getLayerPower()
-{ 
-	vector<double>   power;  
+{
+	vector<double>   power;
 	int x,y,z;
-	power.resize(NoximGlobalParams::mesh_dim_z); 
-	for ( z=0; z<NoximGlobalParams::mesh_dim_z; z++)  
+	power.resize(NoximGlobalParams::mesh_dim_z);
+	for ( z=0; z<NoximGlobalParams::mesh_dim_z; z++)
 		for ( y=0; y<NoximGlobalParams::mesh_dim_y; y++)
 			for ( x=0; x<NoximGlobalParams::mesh_dim_x; x++)
-				power[z] += noc->t[x][y][z]->r->getPower();  
-	return power;  
+				power[z] += noc->t[x][y][z]->r->getPower();
+	return power;
 }
 /****************MODIFY BY HUI-SHUN********************/
-void NoximGlobalStats::showStats(std::ostream & out, bool detailed)
-{
+void NoximGlobalStats::showStats(std::ostream &out, bool detailed) {
     out << "% Total received packets: " << getReceivedPackets() << endl;
     out << "% Total received flits: " << getReceivedFlits() << endl;
-    out << "% Global average delay (cycles): " << getAverageDelay() <<
-	endl;
-    out << "% Global average throughput (flits/cycle): " <<
-	getAverageThroughput() << endl;
+    out << "% Global average delay (cycles): " << getAverageDelay() <<        endl;
+    out << "% Global average throughput (flits/cycle): " <<        getAverageThroughput() << endl;
     out << "% Throughput (flits/cycle/IP): " << getThroughput() << endl;
     out << "% Max delay (cycles): " << getMaxDelay() << endl;
     out << "% Total energy (J): " << getPower() << endl;
-	/****************MODIFY BY HUI-SHUN********************/
-	out	<< "% Avg power (J/cycle) : "<<	getPower()/NoximGlobalParams::simulation_time<< endl;
-	out	<< "% Avg power per router (J/cycle) : "<<	getPower()/NoximGlobalParams::simulation_time/(NoximGlobalParams::mesh_dim_x*NoximGlobalParams::mesh_dim_y*NoximGlobalParams::mesh_dim_z) << endl;
-	out << "% Layer average delay (cycles): " ;
-	vector<double> delay_mtx = getLayerAverageDelay(); 
-	unsigned int z,x,y;
-	for ( z=0; z<delay_mtx.size(); z++)
-		out << setw(6) <<delay_mtx[z]<<"  ";
-	out<<endl;
-	out << "% Layer energy (J): " ;
-    vector<double> power_mtx = getLayerPower(); 
-	for ( z=0; z<power_mtx.size(); z++)
-		out << setw(6) <<power_mtx[z]<<"  ";
-	out<<endl;
-	/****************MODIFY BY HUI-SHUN********************/
-    if (detailed) {
-	out << endl << "detailed = [" << endl;
-	/****************MODIFY BY HUI-SHUN********************/
-	/*for (int y = 0; y < NoximGlobalParams::mesh_dim_y; y++)
-	    for (int x = 0; x < NoximGlobalParams::mesh_dim_x; x++)
-		noc->t[x][y]->r->stats.showStats(y *
-						 NoximGlobalParams::
-						 mesh_dim_x + x, out,
-						 true);*/
-	for( z=0; z<NoximGlobalParams::mesh_dim_z; z++)////
-		for( y=0; y<NoximGlobalParams::mesh_dim_y; y++)
-			for( x=0; x<NoximGlobalParams::mesh_dim_x; x++)
-				noc->t[x][y][z]->r->stats.showStats(z*NoximGlobalParams::mesh_dim_x*NoximGlobalParams::mesh_dim_y + y*NoximGlobalParams::mesh_dim_x+x,out,true);
-	/****************MODIFY BY HUI-SHUN********************/
-	out << "];" << endl;
+    /****************MODIFY BY HUI-SHUN********************/
+    out << "% Avg power (J/cycle) : " << getPower() / NoximGlobalParams::simulation_time << endl;
+    out << "% Avg power per router (J/cycle) : " << getPower() / NoximGlobalParams::simulation_time / (NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y * NoximGlobalParams::mesh_dim_z) << endl;
+    out << "% Layer average delay (cycles): ";
+    vector<double> delay_mtx = getLayerAverageDelay();
+    unsigned int   z, x, y;
+    for(z = 0; z < delay_mtx.size(); z++) {
+        out << setw(6) << delay_mtx[z] << "  ";
+    }
+    out << endl;
+    out << "% Layer energy (J): ";
+    vector<double> power_mtx = getLayerPower();
+    for(z = 0; z < power_mtx.size(); z++) {
+        out << setw(6) << power_mtx[z] << "  ";
+    }
+    out << endl;
+    /****************MODIFY BY HUI-SHUN********************/
+    if(detailed) {
+        out << endl << "detailed = [" << endl;
+        /****************MODIFY BY HUI-SHUN********************/
+        // for(int y = 0; y < NoximGlobalParams::mesh_dim_y; y++) {
+        //     for(int x = 0; x < NoximGlobalParams::mesh_dim_x; x++) {
+        //         noc->t[x][y]->r->stats.showStats(y * NoximGlobalParams::mesh_dim_x + x, out, true);
+        //     }
+        // }
+        for(z = 0; z < NoximGlobalParams::mesh_dim_z; z++) {////
+            for(y = 0; y < NoximGlobalParams::mesh_dim_y; y++) {
+                for(x = 0; x < NoximGlobalParams::mesh_dim_x; x++) {
+                    noc->t[x][y][z]->r->stats.showStats(z * NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y + y * NoximGlobalParams::mesh_dim_x + x, out, true);
+                }
+            }
+        }
+        /****************MODIFY BY HUI-SHUN********************/
+        out << "];" << endl;
 
-	// show MaxDelay matrix
-	vector <vector < vector < double > > > md_mtx = getMaxDelayMtx();
+        // show MaxDelay matrix
+        vector<vector<vector<double> > > md_mtx = getMaxDelayMtx();
 
-	out << endl << "max_delay = [" << endl;
-	/****************MODIFY BY HUI-SHUN********************/
-	/*for (unsigned int y = 0; y < md_mtx.size(); y++) {
-	    out << "   ";
-	    for (unsigned int x = 0; x < md_mtx[y].size(); x++)
-		out << setw(6) << md_mtx[y][x];
-	    out << endl;
-	}*/
-	for( z=0; z<md_mtx.size(); z++)
-		for( y=0; y<md_mtx[z].size(); y++){
-			out << "   ";
-			for ( x=0; x<md_mtx[z][y].size(); x++)
-				out << setw(6) << md_mtx[z][y][x];
-			out << endl;
-		}
-	/****************MODIFY BY HUI-SHUN********************/
-	out << "];" << endl;
+        out << endl << "max_delay = [" << endl;
+        /****************MODIFY BY HUI-SHUN********************/
+        /*for (unsigned int y = 0; y < md_mtx.size(); y++) {
+            out << "   ";
+            for (unsigned int x = 0; x < md_mtx[y].size(); x++)
+            out << setw(6) << md_mtx[y][x];
+            out << endl;
+        }*/
+        for(z = 0; z < md_mtx.size(); z++) {
+            for(y = 0; y < md_mtx[z].size(); y++) {
+                out << "   ";
+                for(x = 0; x < md_mtx[z][y].size(); x++) {
+                    out << setw(6) << md_mtx[z][y][x];
+                }
+                out << endl;
+            }
+        }
+        /****************MODIFY BY HUI-SHUN********************/
+        out << "];" << endl;
 
-	// show RoutedFlits matrix
-	vector <vector < vector < unsigned long > > > rf_mtx = getRoutedFlitsMtx();
+        // show RoutedFlits matrix
+        vector<vector<vector<unsigned long> > > rf_mtx = getRoutedFlitsMtx();
 
-	out << endl << "routed_flits = [" << endl;
-	/****************MODIFY BY HUI-SHUN********************/
-	/*for (unsigned int y = 0; y < rf_mtx.size(); y++) {
-	    out << "   ";
-	    for (unsigned int x = 0; x < rf_mtx[y].size(); x++)
-		out << setw(10) << rf_mtx[y][x];
-	    out << endl;	}*/
-	for ( z=0; z<rf_mtx.size(); z++)
-		for ( y=0; y<rf_mtx[z].size(); y++){
-			out << "   ";
-			for ( x=0; x<rf_mtx[z][y].size(); x++)
-				out << setw(10) << rf_mtx[z][y][x];
-			out << endl;
-		}
-	 /****************MODIFY BY HUI-SHUN********************/ 
-	out << "];" << endl;    }
-	
-	
+        out << endl << "routed_flits = [" << endl;
+        /****************MODIFY BY HUI-SHUN********************/
+        // for(unsigned int y = 0; y < rf_mtx.size(); y++) {
+        //     out << "   ";
+        //     for(unsigned int x = 0; x < rf_mtx[y].size(); x++) {
+        //         out << setw(10) << rf_mtx[y][x];
+        //     }
+        //     out << endl;
+        // }
+        for(z = 0; z < rf_mtx.size(); z++) {
+            for(y = 0; y < rf_mtx[z].size(); y++) {
+                out << "   ";
+                for(x = 0; x < rf_mtx[z][y].size(); x++) {
+                    out << setw(10) << rf_mtx[z][y][x];
+                }
+                out << endl;
+            }
+        }
+        /****************MODIFY BY HUI-SHUN********************/
+        out << "];" << endl;
+    }
 }

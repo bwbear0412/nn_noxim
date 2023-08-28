@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="noxim"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\home\;CMake Files\..\..\..\..\..\home\bwbear\;CMake Files\..\..\..\..\..\home\bwbear\systemc-2.3.3-cmake\;CMake Files\..\..\..\..\..\home\bwbear\systemc-2.3.3-cmake\build\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="noxim">
+				<Option output="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/noxim" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/systemc-2.3.3/include"/>
+					<Add directory="/home/bwbear/systemc-2.3.3-cmake/src"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 noxim"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="noxim/fast">
+				<Option output="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/noxim" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/e/Projects/Github/nn_noxim/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/systemc-2.3.3/include"/>
+					<Add directory="/home/bwbear/systemc-2.3.3-cmake/src"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 noxim/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NNModel.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NNModel.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximBuffer.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximBuffer.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximCmdLineParser.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximCmdLineParser.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalRoutingTable.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalRoutingTable.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalStats.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalStats.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalTrafficTable.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximGlobalTrafficTable.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximLocalRoutingTable.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximLocalRoutingTable.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximMain.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximMain.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximNoC.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximNoC.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximPower.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximPower.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximProcessingElement.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximProcessingElement.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximReservationTable.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximReservationTable.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximRouter.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximRouter.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximStats.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/NoximStats.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/RCutil.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/flp.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/flp.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/npe.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/npe.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/package.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/package.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/shape.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/shape.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature_block.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature_block.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature_grid.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/temperature_grid.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/thermal_IF.cpp">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/thermal_IF.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/util.c">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/src/util.h">
+			<Option target="noxim"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/../../../../../home/bwbear/systemc-2.3.3-cmake/build/SystemCLanguageConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\home\bwbear\systemc-2.3.3-cmake\build\"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/../../../../../home/bwbear/systemc-2.3.3-cmake/build/SystemCLanguageConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\home\bwbear\systemc-2.3.3-cmake\build\"/>
+		</Unit>
+		<Unit filename="/mnt/e/Projects/Github/nn_noxim/../../../../../home/bwbear/systemc-2.3.3-cmake/build/SystemCLanguageTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\home\bwbear\systemc-2.3.3-cmake\build\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

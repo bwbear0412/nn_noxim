@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="413cbc9b-48cb-4f61-9f2e-1915cef47927" name="WSL">
+        <fileTransfer rootFolder="/home/bwbear" accessType="SFTP" host="172.25.110.56" port="22" sshConfigId="6467354b-9bfe-458b-9337-cbda9085a35a" sshConfig="bwbear@172.25.110.56:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

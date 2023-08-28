@@ -1,0 +1,3 @@
+/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/e/Projects/Github/nn_noxim/cmake-build-debug/CMakeFiles/noxim.dir

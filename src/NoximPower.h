@@ -50,10 +50,10 @@ hop interconnect is 0.384nJ.
 // ------ Noxim Original Power Model <end> */
 
 // ------- Intel 80-cores Power Model <start> 
-//���: Watt
-//�ϥήɷ|�A���W�ɯ߶g��(�ާ@�W�v�˼�), �ƭȥN���@�g���Ү��Ӥ���q(E = P/f)
-//�ƭȬ��Ѧ�intel 80 core���ƾ�, �᭱��scaling factor�ΥH�վ�ܷūײŦX��paper�ҭz��110��
-//ENERGY_SCALING_FACTOR ��ֿn��energy�@scaling �[�ּ����t��
+//虫: Watt
+//ㄏノ穦秅戳(巨繵瞯计), 计秅戳┮ぇ秖(E = P/f)
+//计把σintel 80 coreぇ计沮, scaling factorノ秸俱放才赣paper┮瓃ぇ110
+//ENERGY_SCALING_FACTOR 癸仓縩energyscaling е家览硉
 /*
     #define PWR_QUEUES_DATA_PATH            203.28e-3 *CYCLE_PERIOD*1e-9*2*2 *POWER_SCALING_FACTOR *ENERGY_SCALING_FACTOR
     #define PWR_MSINT                       55.44e-3  *CYCLE_PERIOD*1e-9*2*2 *POWER_SCALING_FACTOR *ENERGY_SCALING_FACTOR
@@ -75,7 +75,7 @@ hop interconnect is 0.384nJ.
 */
 
 // ------- Intel 80-core Energy Table, modified by Chihhao <begin>
-                                            // �᭱�o�� *2 *2 �P *2 *6�n�A�T�{�O�ƻ�
+                                            // 硂ㄇ *2 *2 籔 *2 *6璶絋粄琌或
 
     #define ENERGY_QUEUES_DATA_PATH    0.20328 *1e-9 *2 *2
     #define ENERGY_MSINT               0.05544 *1e-9 *2 *2
