@@ -50,8 +50,10 @@ public:
         Tmp2TtraceFile(temp);
     }
 
-    void fpGenerator();  //floorplan Generator
-    void steadyTmp(NoximTile *t[MAX_STATIC_DIM][MAX_STATIC_DIM][MAX_STATIC_DIM]) { hs_steady(t); }
+    void fpGenerator();  // floorplan Generator
+    void steadyTmp(NoximTile *t[MAX_STATIC_DIM][MAX_STATIC_DIM][MAX_STATIC_DIM]) {
+        hs_steady(t);
+    }
 
     void finish() { hs_finish(); }
 

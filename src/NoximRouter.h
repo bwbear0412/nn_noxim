@@ -26,26 +26,23 @@ extern unsigned int drained_volume;
 SC_MODULE(NoximRouter) {
 
     // I/O Ports
-    sc_in_clk   clock;                          // The input clock for the router
-    sc_in<bool> reset;                           // The reset signal for the router
-
-    sc_in<NoximFlit> flit_rx[DIRECTIONS + 1];      // The input channels (including local one)
-    sc_in<bool>      req_rx[DIRECTIONS + 1];      // The requests associated with the input channels
-    sc_out<bool>     ack_rx[DIRECTIONS + 1];      // The outgoing ack signals associated with the input channels
-
-    sc_out<NoximFlit> flit_tx[DIRECTIONS + 1];   // The output channels (including local one)
-    sc_out<bool>      req_tx[DIRECTIONS + 1];      // The requests associated with the output channels
-    sc_in<bool>       ack_tx[DIRECTIONS + 1];      // The outgoing ack signals associated with the output channels
-
+    sc_in_clk             clock;                                        // The input clock for the router
+    sc_in<bool>           reset;                                        // The reset signal for the router
+    sc_in<NoximFlit>      flit_rx[DIRECTIONS + 1];                      // The input channels (including local one)
+    sc_in<bool>           req_rx[DIRECTIONS + 1];                       // The requests associated with the input channels
+    sc_out<bool>          ack_rx[DIRECTIONS + 1];                       // The outgoing ack signals associated with the input channels
+    sc_out<NoximFlit>     flit_tx[DIRECTIONS + 1];                      // The output channels (including local one)
+    sc_out<bool>          req_tx[DIRECTIONS + 1];                       // The requests associated with the output channels
+    sc_in<bool>           ack_tx[DIRECTIONS + 1];                       // The outgoing ack signals associated with the output channels
     sc_out<int>           free_slots[DIRECTIONS + 1];
     sc_in<int>            free_slots_neighbor[DIRECTIONS + 1];
     /*******THROTTLING******/
-    sc_out<bool>          on_off[4];                  //綟router琌Τ砆throttle neighbor
-    sc_in<bool>           on_off_neighbor[4];      //耞綟router琌砆throttle neighbor, ㄓ∕﹚琌露秨
+    sc_out<bool>          on_off[4];
+    sc_in<bool>           on_off_neighbor[4];
     /*******THROTTLING******/
     /*******DOWNWARD ROUTING******/
-    sc_out<int>           DW_tag[4];                  //沮pillartraffic薄猵┮∕﹚ㄏノDW level
-    sc_in<int>            DW_tag_neighbor[4];      //綟routerㄏノDW level
+    sc_out<int>           DW_tag[4];
+    sc_in<int>            DW_tag_neighbor[4];
     /*******DOWNWARD ROUTING******/
     /*******RCA******/
     sc_out<double>        monitor_out[DIRECTIONS];
@@ -57,36 +54,35 @@ SC_MODULE(NoximRouter) {
 
     // Registers
 
-    /*
-       NoximCoord position;                     // Router position inside the mesh
-     */
-    int                    local_id;                        // Unique ID
-    int                    routing_type;                        // Type of routing algorithm
+
+    NoximCoord             position;                                // Router position inside the mesh
+    int                    local_id;                                // Unique ID
+    int                    routing_type;                            // Type of routing algorithm
     int                    selection_type;
-    NoximBuffer            buffer[DIRECTIONS + 1];            // Buffer for each input channel
-    bool                   current_level_rx[DIRECTIONS + 1];    // Current level for Alternating Bit Protocol (ABP)
-    bool                   current_level_tx[DIRECTIONS + 1];    // Current level for Alternating Bit Protocol (ABP)
-    NoximStats             stats;                        // Statistics
-    NoximLocalRoutingTable routing_table;    // Routing table
-    NoximReservationTable  reservation_table;    // Switch reservation table
-    int                    start_from_port;                    // Port from which to start the reservation cycle
+    NoximBuffer            buffer[DIRECTIONS + 1];                  // Buffer for each input channel
+    bool                   current_level_rx[DIRECTIONS + 1];        // Current level for Alternating Bit Protocol (ABP)
+    bool                   current_level_tx[DIRECTIONS + 1];        // Current level for Alternating Bit Protocol (ABP)
+    NoximStats             stats;                                   // Statistics
+    NoximLocalRoutingTable routing_table;                           // Routing table
+    NoximReservationTable  reservation_table;                       // Switch reservation table
+    int                    start_from_port;                         // Port from which to start the reservation cycle
     unsigned long          routed_flits;
     /*******THROTTLING******/
-    bool                   emergency;                                    // emergency mode
-    int                    emergency_level;                            // emergency level
-    double                 Q_ratio;                                    // traffic quota ratio
-    bool                   throttle_neighbor;                            // throttle port from neighbor routers
+    bool                   emergency;                               // emergency mode
+    int                    emergency_level;                         // emergency level
+    double                 Q_ratio;                                 // traffic quota ratio
+    bool                   throttle_neighbor;                       // throttle port from neighbor routers
     /*******THROTTLING******/
     /*******DOWNWARD ROUTING******/
     int                    Quota_neighbor;
-    int                    incre_;                                        //increse when temperature > last_temperature
-    int                    DW_tag_cur;                                    //DW_tag of current router
+    int                    incre_;                                  // increse when temperature > last_temperature
+    int                    DW_tag_cur;                              // DW_tag of current router
     /*******DOWNWARD ROUTING******/
     /*******RCA******/
-    double                 RCA_select[DIRECTIONS];                     //For RCA selection and next propagation
+    double                 RCA_select[DIRECTIONS];                  //For RCA selection and next propagation
     /*******RCA******/
     /****UNKNOWN****/
-    int                    cnt_neighbor;                                // counter for packets from neighbor routers
+    int                    cnt_neighbor;                            // counter for packets from neighbor routers
     int                    cnt_received;
     int                    thermal_counter[DIRECTIONS];
     bool                   UnavailableTemp;
@@ -96,18 +92,18 @@ SC_MODULE(NoximRouter) {
     /****UNKNOWN****/
     // Functions
 
-    void rxProcess();        // The receiving process
-    void txProcess();        // The transmitting process
-    void bufferMonitor();    // buffer监控
+    void rxProcess();                                               // The receiving process
+    void txProcess();                                               // The transmitting process
+    void bufferMonitor();                                           // buffer监控
 
     void configure(const int _id,
                    const double _warm_up_time,
                    const unsigned int _max_buffer_size,
                    NoximGlobalRoutingTable &grt);
 
-    unsigned long getRoutedFlits();    // Returns the number of routed flits
-    unsigned int getFlitsCount();    // Returns the number of flits into the router
-    double getPower();                // Returns the total power dissipated by the router
+    unsigned long getRoutedFlits();                                 // Returns the number of routed flits
+    unsigned int getFlitsCount();                                   // Returns the number of flits into the router
+    double getPower();                                              // Returns the total power dissipated by the router
 
     /*******THROTTLING******/
     void TraffThrottlingProcess();
@@ -139,7 +135,6 @@ SC_MODULE(NoximRouter) {
     }
 
 private:
-
     // performs actual routing + selection
     int route(const NoximRouteData &route_data);
 

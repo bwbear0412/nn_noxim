@@ -55,7 +55,7 @@ int                        NoximGlobalParams::rnd_generator_seed            = 0;
 bool                       NoximGlobalParams::detailed                      = DEFAULT_DETAILED;
 float                      NoximGlobalParams::dyad_threshold                = DEFAULT_DYAD_THRESHOLD;
 unsigned int               NoximGlobalParams::max_volume_to_be_drained      = DEFAULT_MAX_VOLUME_TO_BE_DRAINED;
-vector<pair<int, double> > NoximGlobalParams::hotspots;
+vector<pair<int, double>>  NoximGlobalParams::hotspots;
 //***MODIFY BY HUI-SHUN***/
 int                        NoximGlobalParams::throt_type                    = DEFAULT_THROTTLING_TYPE;
 int                        NoximGlobalParams::down_level                    = DEFAULT_DOWN_LEVEL;
@@ -70,8 +70,8 @@ char                       NoximGlobalParams::NNinput_filename[128]         = DE
 int                        NoximGlobalParams::PE_computation_time           = DEFAULT_PE_COMPUTATION_TIME;
 //**************************************//
 //** 2018.09.12 edit by Yueh-Chi, Yang **//
-//deque < deque < deque <int> > >  NoximGlobalParams::throttling;
-int                        NoximGlobalParams::throttling[128][128][1]; //** 2018.09.14 edit by Yueh-Chi,Yang **//
+// deque<deque<deque<int>>>   NoximGlobalParams::throttling;
+int                        NoximGlobalParams::throttling[128][128][128]; //** 2018.09.14 edit by Yueh-Chi,Yang **//
 //***************************************//
 
 int sc_main(int arg_num, char *arg_vet[]) {
@@ -85,22 +85,19 @@ int sc_main(int arg_num, char *arg_vet[]) {
     parseCmdLine(arg_num, arg_vet);
     //** 2018.09.12 **//
     int i, j, k;
-    /*deque <int> x;
-    x.assign(NoximGlobalParams::mesh_dim_x,0);
-    x[7] = 3;
-    cout << "x: " << x[7] << endl;
-    deque < deque<int> > y;
-    y.assign(NoximGlobalParams::mesh_dim_y,x);
-    cout << "x: " << x[7] << endl << "y: " << y[7][9] << endl;*/
-    //deque < deque < deque<int> > > z;
-    //z.assign(NoximGlobalParams::mesh_dim_z,y);
-    //cout << "x: " << x[0] << endl << "y: " << y[0][0] << endl << "z: " << z[0][0][0] << endl;
-    //NoximGlobalParams::throttling.assign(NoximGlobalParams::mesh_dim_z,y);
+    // deque<int> x;
+    // x.assign(NoximGlobalParams::mesh_dim_x, 0);
+    // x[7] = 3;
+    // cout << "x: " << x[7] << endl;
+    // deque<deque<int>> y;
+    // y.assign(NoximGlobalParams::mesh_dim_y, x);
+    // cout << "x: " << x[7] << endl << "y: " << y[7][9] << endl;
+    // deque<deque<deque<int>>> z;
+    // z.assign(NoximGlobalParams::mesh_dim_z, y);
+    // cout << "x: " << x[0] << endl << "y: " << y[0][0] << endl << "z: " << z[0][0][0] << endl;
+    // NoximGlobalParams::throttling.assign(NoximGlobalParams::mesh_dim_z, y);
 
-
-
-
-    //cout << "throttling: " << NoximGlobalParams::throttling[5][5][1];
+    // cout << "throttling: " << NoximGlobalParams::throttling[5][5][1];
     //****************//
 
     // Signals
@@ -164,14 +161,14 @@ int sc_main(int arg_num, char *arg_vet[]) {
     }
 
     /***** Modified by CMH *****/
-    //Transient power tracefile  
+    // Transient power tracefile
     char   temperal[20];
     string pwr_filename = string("results/POWER/PWR");
-    //char temperal [20];
-    //sprintf( temperal, "%d", NoximGlobalParams::routing_algorithm);
-    //buffer_filename =buffer_filename  + "_routing-" + temperal;
-    //sprintf( temperal, "%d", NoximGlobalParams::selection_strategy);
-    //buffer_filename  = buffer_filename + "_selection-" + temperal;
+    // char   temperal[20];
+    // sprintf(temperal, "%d", NoximGlobalParams::routing_algorithm);
+    // buffer_filename = buffer_filename + "_routing-" + temperal;
+    // sprintf(temperal, "%d", NoximGlobalParams::selection_strategy);
+    // buffer_filename = buffer_filename + "_selection-" + temperal;
     sprintf(temperal, "%f", NoximGlobalParams::packet_injection_rate);
     pwr_filename = pwr_filename + "_pir-" + temperal;
     sprintf(temperal, "%d", NoximGlobalParams::traffic_distribution);
@@ -192,7 +189,7 @@ int sc_main(int arg_num, char *arg_vet[]) {
     results_log_pwr << "\n";
 
     string buffer_filename = string("results/buffer/buffer");
-    // char temperal[20];
+    // char   temperal[20];
     // sprintf(temperal, "%d", NoximGlobalParams::routing_algorithm);
     // buffer_filename = buffer_filename + "_routing-" + temperal;
     // sprintf(temperal, "%d", NoximGlobalParams::selection_strategy);
@@ -205,7 +202,6 @@ int sc_main(int arg_num, char *arg_vet[]) {
     if(!results_buffer.is_open()) {
         cout << "Cannot open" << buffer_filename.c_str() << endl;
     }
-
     for(int z = 0; z < NoximGlobalParams::mesh_dim_z; z++) {
         for(int y = 0; y < NoximGlobalParams::mesh_dim_y; y++) {
             for(int x = 0; x < NoximGlobalParams::mesh_dim_x; x++) {
@@ -225,12 +221,9 @@ int sc_main(int arg_num, char *arg_vet[]) {
     sc_start(DEFAULT_RESET_TIME * CYCLE_PERIOD, SC_NS);
     cout << "Reset..0 ";
     reset.write(0);
-
     cout << " done! Now running for " << NoximGlobalParams::
     simulation_time << " cycles..." << endl;
     sc_start(NoximGlobalParams::simulation_time * CYCLE_PERIOD, SC_NS);
-
-
 
     // Close the simulation
     if(NoximGlobalParams::trace_mode) {
@@ -395,8 +388,7 @@ int sc_main(int arg_num, char *arg_vet[]) {
     if(!results_STLD.is_open()) {
         cout << "Cannot open" << STLD_filename.c_str() << endl;
     }
-    results_STLD << NoximGlobalParams::mesh_dim_x << " " << NoximGlobalParams::mesh_dim_y << " "
-                 << NoximGlobalParams::mesh_dim_z << endl;
+    results_STLD << NoximGlobalParams::mesh_dim_x << " " << NoximGlobalParams::mesh_dim_y << " " << NoximGlobalParams::mesh_dim_z << endl;
     for(int z = 0; z < NoximGlobalParams::mesh_dim_z; z++) {
         for(int y = 0; y < NoximGlobalParams::mesh_dim_y; y++) {
             for(int x = 0; x < NoximGlobalParams::mesh_dim_x; x++) {

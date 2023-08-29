@@ -1666,8 +1666,7 @@ int NoximRouter::getNeighborId_downward(int _id, int direction, int dst_id) cons
     return neighbor_id;
 }
 
-void NoximRouter::TraffThrottlingProcess()    //璝emergency mode, traffic禬筁traffic quota, 玥throttle
-{
+void NoximRouter::TraffThrottlingProcess() {
     if(reset.read()) {
         for(int i = 0; i < 4; i++) {
             on_off[i].write(0);
@@ -1754,4 +1753,8 @@ bool NoximRouter::inCongestion() {
     }
 
     return false;
+}
+
+vector<int> NoximRouter::routingLookAhead(const NoximCoord &current, const NoximCoord &destination) {
+    return vector<int>();
 }

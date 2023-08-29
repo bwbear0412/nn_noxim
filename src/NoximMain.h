@@ -24,7 +24,7 @@ using namespace std;
 
 // Define the directions as numbers
 /****************MODIFY BY HUI-SHUN********************/
-//#define DIRECTIONS             4
+// #define DIRECTIONS             4
 #define DIRECTIONS             6
 #define DIRECTION_NORTH        0
 #define DIRECTION_EAST         1
@@ -212,52 +212,52 @@ using namespace std;
 
 // NoximGlobalParams -- used to forward configuration to every sub-block
 struct NoximGlobalParams {
-    static int                        verbose_mode;
-    static int                        trace_mode;
-    static char                       trace_filename[128];
-    static int                        mesh_dim_x;
-    static int                        mesh_dim_y;
+    static int                       verbose_mode;
+    static int                       trace_mode;
+    static char                      trace_filename[128];
+    static int                       mesh_dim_x;
+    static int                       mesh_dim_y;
     /****************MODIFY BY HUI-SHUN********************/
-    static int                        mesh_dim_z;
+    static int                       mesh_dim_z;
     /****************MODIFY BY HUI-SHUN********************/
-    static int                        group_neu_num;    //** 2018.09.01 edit by Yueh-Chi,Yang **//
-    static int                        buffer_depth;
-    static int                        min_packet_size;
-    static int                        max_packet_size;
-    static int                        routing_algorithm;
-    static char                       routing_table_filename[128];
-    static int                        selection_strategy;
-    static float                      packet_injection_rate;
-    static float                      probability_of_retransmission;
-    static int                        traffic_distribution;
-    static char                       traffic_table_filename[128];
-    static int                        simulation_time;
-    static int                        stats_warm_up_time;
-    static int                        rnd_generator_seed;
-    static bool                       detailed;
-    static vector<pair<int, double> > hotspots;
-    static float                      dyad_threshold;
-    static unsigned int               max_volume_to_be_drained;
+    static int                       group_neu_num;    //** 2018.09.01 edit by Yueh-Chi,Yang **//
+    static int                       buffer_depth;
+    static int                       min_packet_size;
+    static int                       max_packet_size;
+    static int                       routing_algorithm;
+    static char                      routing_table_filename[128];
+    static int                       selection_strategy;
+    static float                     packet_injection_rate;
+    static float                     probability_of_retransmission;
+    static int                       traffic_distribution;
+    static char                      traffic_table_filename[128];
+    static int                       simulation_time;
+    static int                       stats_warm_up_time;
+    static int                       rnd_generator_seed;
+    static bool                      detailed;
+    static vector<pair<int, double>> hotspots;
+    static float                     dyad_threshold;
+    static unsigned int              max_volume_to_be_drained;
     /****************MODIFY BY HUI-SHUN********************/
-    static int                        burst_length;
-    static int                        down_level;
-    static int                        throt_type;
-    static float                      throt_ratio;
-    static double                     max_temp;
-    static char                       max_temp_r[40];
-    static bool                       pir_is_local_random;
+    static int                       burst_length;
+    static int                       down_level;
+    static int                       throt_type;
+    static float                     throt_ratio;
+    static double                    max_temp;
+    static char                      max_temp_r[40];
+    static bool                      pir_is_local_random;
     /****************MODIFY BY HUI-SHUN********************/
     //** 2018.09.02 edit by Yueh-Chi,Yang **//
-    static char                       NNmodel_filename[128];
-    static char                       NNweight_filename[128];
-    static char                       mapping_algorithm[128];
-    static char                       mapping_table_filename[128];
-    static char                       NNinput_filename[128];
-    static int                        PE_computation_time;
+    static char                      NNmodel_filename[128];
+    static char                      NNweight_filename[128];
+    static char                      mapping_algorithm[128];
+    static char                      mapping_table_filename[128];
+    static char                      NNinput_filename[128];
+    static int                       PE_computation_time;
     //**************************************//
     //** 2018.09.12 edit by Yueh-Chi, Yang **//
-    //static deque < deque < deque <int> > > throttling;
-    static int                        throttling[128][128][1];
+    // static deque<deque<deque<int>>>   throttling;
+    static int                       throttling[128][128][128];
     //***************************************//
 };
 
@@ -348,13 +348,13 @@ struct NoximNoP_data {
     inline bool operator==(const NoximNoP_data &nop_data) const {
         return (sender_id == nop_data.sender_id &&
                 nop_data.channel_status_neighbor[0] ==
-                channel_status_neighbor[0]
-                && nop_data.channel_status_neighbor[1] ==
-                   channel_status_neighbor[1]
-                && nop_data.channel_status_neighbor[2] ==
-                   channel_status_neighbor[2]
-                && nop_data.channel_status_neighbor[3] ==
-                   channel_status_neighbor[3]);
+                channel_status_neighbor[0] &&
+                nop_data.channel_status_neighbor[1] ==
+                channel_status_neighbor[1] &&
+                nop_data.channel_status_neighbor[2] ==
+                channel_status_neighbor[2] &&
+                nop_data.channel_status_neighbor[3] ==
+                channel_status_neighbor[3]);
     };
 };
 
@@ -362,23 +362,25 @@ struct NoximNoP_data {
 struct NoximFlit {
     int           src_id;
     int           dst_id;
-    NoximFlitType flit_type;    // The flit type (FLIT_TYPE_HEAD, FLIT_TYPE_BODY, FLIT_TYPE_TAIL)
-    int           sequence_no;        // The sequence number of the flit inside the packet
-    NoximPayload  payload;    // Optional payload
+    NoximFlitType flit_type;        // The flit type (FLIT_TYPE_HEAD, FLIT_TYPE_BODY, FLIT_TYPE_TAIL)
+    int           sequence_no;      // The sequence number of the flit inside the packet
+    NoximPayload  payload;          // Optional payload
     double        timestamp;        // Unix timestamp at packet generation
-    int           hop_no;            // Current number of hops from source to destination
+    int           hop_no;           // Current number of hops from source to destination
     int           routing_f;
 
-    float data;                //tytyty
-    bool  XYX_routing;        //tytyty-XYXrouting
+    float data;                     //tytyty
+    bool  XYX_routing;              //tytyty-XYXrouting
     int   src_Neu_id;
 
     inline bool operator==(const NoximFlit &flit) const {
-        return (flit.src_id == src_id && flit.dst_id == dst_id
-                && flit.flit_type == flit_type
-                && flit.sequence_no == sequence_no
-                && flit.payload == payload && flit.timestamp == timestamp
-                && flit.hop_no == hop_no);
+        return (flit.src_id == src_id &&
+                flit.dst_id == dst_id &&
+                flit.flit_type == flit_type &&
+                flit.sequence_no == sequence_no &&
+                flit.payload == payload &&
+                flit.timestamp == timestamp &&
+                flit.hop_no == hop_no);
     }
 };
 
@@ -409,8 +411,7 @@ inline ostream &operator<<(ostream &os, const NoximFlit &flit) {
         }
         os << "Sequence no. " << flit.sequence_no << endl;
         os << "Payload printing not implemented (yet)." << endl;
-        os << "Unix timestamp at packet generation " << flit.
-                                                                    timestamp << endl;
+        os << "Unix timestamp at packet generation " << flit.timestamp << endl;
         os << "Total number of hops from source to destination is " <<
            flit.hop_no << endl;
     }
@@ -432,15 +433,14 @@ inline ostream &operator<<(ostream &os, const NoximFlit &flit) {
     }
 //**************************NN-Noxim*********************************
 
-    os << ", src_Neu_id = " << flit.src_Neu_id;//tytyty
-    os << ", data = " << flit.data;//tytyty
+    os << ", src_Neu_id = " << flit.src_Neu_id;  //tytyty
+    os << ", data = " << flit.data;              //tytyty
 
 //**************************^^^^^^^^^^^^*****************************
     return os;
 }
 
-inline ostream &operator<<(ostream &os,
-                           const NoximChannelStatus &status) {
+inline ostream &operator<<(ostream &os, const NoximChannelStatus &status) {
     char msg;
     if(status.available) {
         msg = 'A';
@@ -465,7 +465,7 @@ inline ostream &operator<<(ostream &os, const NoximNoP_data &NoP_data) {
 
 inline ostream &operator<<(ostream &os, const NoximCoord &coord) {
     /****************MODIFY BY HUI-SHUN********************/
-    //os << "(" << coord.x << "," << coord.y << ")";
+    // os << "(" << coord.x << "," << coord.y << ")";
     os << "(" << coord.x << "," << coord.y << "," << coord.z << ")";
     /****************MODIFY BY HUI-SHUN********************/
 
@@ -473,7 +473,6 @@ inline ostream &operator<<(ostream &os, const NoximCoord &coord) {
 }
 
 // Trace overloading
-
 inline void sc_trace(sc_trace_file *&tf, const NoximFlit &flit, string &name) {
     sc_trace(tf, flit.src_id, name + ".src_id");
     sc_trace(tf, flit.dst_id, name + ".dst_id");
@@ -492,13 +491,12 @@ inline void sc_trace(sc_trace_file *&tf, const NoximChannelStatus &bs, string &n
 }
 
 // Misc common functions
-
 inline NoximCoord id2Coord(int id) {
     NoximCoord coord;
 /****************MODIFY BY HUI-SHUN********************/
-    //coord.x = id % NoximGlobalParams::mesh_dim_x;
-    //coord.y = id / NoximGlobalParams::mesh_dim_x;
-    coord.z = id / (NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y);////
+    // coord.x = id % NoximGlobalParams::mesh_dim_x;
+    // coord.y = id / NoximGlobalParams::mesh_dim_x;
+    coord.z = id / (NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y);
     coord.y = (id - coord.z * NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y) / NoximGlobalParams::mesh_dim_x;
     coord.x = (id - coord.z * NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y) % NoximGlobalParams::mesh_dim_x;
 
@@ -513,8 +511,8 @@ inline int coord2Id(const NoximCoord &coord) {
     /****************MODIFY BY HUI-SHUN********************/
     // int id = (coord.y * NoximGlobalParams::mesh_dim_x) + coord.x;
     // assert(id < NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y);
-    int id = coord.z * NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y + (coord.y * NoximGlobalParams::mesh_dim_x) + coord.x; ////
-    assert(id < NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y * NoximGlobalParams::mesh_dim_z); ////
+    int id = coord.z * NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y + (coord.y * NoximGlobalParams::mesh_dim_x) + coord.x;
+    assert(id < NoximGlobalParams::mesh_dim_x * NoximGlobalParams::mesh_dim_y * NoximGlobalParams::mesh_dim_z);
     /****************MODIFY BY HUI-SHUN********************/
     return id;
 }

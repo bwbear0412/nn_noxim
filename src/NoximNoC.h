@@ -88,6 +88,7 @@ SC_MODULE(NoximNoC) {
     sc_signal<int>          DW_tag_to_south[MAX_STATIC_DIM + 1][MAX_STATIC_DIM + 1][MAX_STATIC_DIM + 1];
     sc_signal<int>          DW_tag_to_north[MAX_STATIC_DIM + 1][MAX_STATIC_DIM + 1][MAX_STATIC_DIM + 1];
     /*******DOWNWARD ROUTING******/
+    // a tile has a pe and a router
     // Matrix of tiles
     NoximTile               *t[MAX_STATIC_DIM][MAX_STATIC_DIM][MAX_STATIC_DIM];
     /****************MODIFY BY HUI-SHUN********************/

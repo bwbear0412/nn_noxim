@@ -249,16 +249,14 @@ void Thermal_IF::hs_steady(NoximTile *t[MAX_STATIC_DIM][MAX_STATIC_DIM][MAX_STAT
     hs_simulation_time = int(getCurrentCycleNum() / TEMP_REPORT_PERIOD);
 
     /* find the average power dissipated in the elapsed time */
-/*
-    for(i = 0, base = 0; i < hs_model->grid->n_layers; i++) {
-        if(hs_model->grid->layers[i].has_power) {
-            for(j = 0; j < hs_model->grid->layers[i].flp->n_units; j++) {
-                hs_overall_power[base + j] /= hs_simulation_time;
-            }
-        }
-        base += hs_model->grid->layers[i].flp->n_units;
-    }
-*/
+    // for(i = 0, base = 0; i < hs_model->grid->n_layers; i++) {
+    //     if(hs_model->grid->layers[i].has_power) {
+    //         for(j = 0; j < hs_model->grid->layers[i].flp->n_units; j++) {
+    //             hs_overall_power[base + j] /= hs_simulation_time;
+    //         }
+    //     }
+    //     base += hs_model->grid->layers[i].flp->n_units;
+    // }
     for(int z = 0; z < mesh_dim_z; z++) {
         for(int y = 0; y < mesh_dim_y; y++) {
             for(int x = 0; x < mesh_dim_x; x++) {
@@ -269,8 +267,11 @@ void Thermal_IF::hs_steady(NoximTile *t[MAX_STATIC_DIM][MAX_STATIC_DIM][MAX_STAT
             }
         }
     }
-    /*Create the file name for each simulation.
-	  Simulations with the same configuration will be recorded in the same file. 2009/12/8-Foster*/
+
+    // Create the file name for each simulation.
+    // Simulations with the same configuration will be recorded in the same file.
+    // 2009/12/8-Foster
+
     // sprintf(temperal, "%d", NoximGlobalParams::routing_algorithm);
     // file_name = file_name + "_routing-" + temperal;
     // sprintf(temperal, "%d", NoximGlobalParams::selection_strategy);
