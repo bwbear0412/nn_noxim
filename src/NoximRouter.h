@@ -53,8 +53,6 @@ SC_MODULE(NoximRouter) {
     sc_in<NoximNoP_data>  NoP_data_in[DIRECTIONS];
 
     // Registers
-
-
     NoximCoord             position;                                // Router position inside the mesh
     int                    local_id;                                // Unique ID
     int                    routing_type;                            // Type of routing algorithm

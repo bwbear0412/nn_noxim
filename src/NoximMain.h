@@ -30,7 +30,7 @@ using namespace std;
 #define DIRECTION_EAST         1
 #define DIRECTION_SOUTH        2
 #define DIRECTION_WEST         3
-//#define DIRECTION_LOCAL        4
+// #define DIRECTION_LOCAL        4
 #define DIRECTION_UP           4
 #define DIRECTION_DOWN         5
 #define DIRECTION_LOCAL        6
@@ -97,7 +97,7 @@ using namespace std;
 #define TRAFFIC_SHUFFLE        6
 #define TRAFFIC_BUTTERFLY      7
 /****************MODIFY BY HUI-SHUN********************/
-#define TRAFFIC_RANDOM_TVAR       8
+#define TRAFFIC_RANDOM_TVAR    8
 #define TRAFFIC_RANDOM_2       9
 /****************MODIFY BY HUI-SHUN********************/
 #define INVALID_TRAFFIC       -1
@@ -392,9 +392,7 @@ inline int getCurrentCycleNum() {
 // Output overloading
 
 inline ostream &operator<<(ostream &os, const NoximFlit &flit) {
-
     if(NoximGlobalParams::verbose_mode == VERBOSE_HIGH) {
-
         os << "### FLIT ###" << endl;
         os << "Source Tile[" << flit.src_id << "]" << endl;
         os << "Destination Tile[" << flit.dst_id << "]" << endl;
@@ -428,7 +426,6 @@ inline ostream &operator<<(ostream &os, const NoximFlit &flit) {
                 os << "T";
                 break;
         }
-
         os << ", seq: " << flit.sequence_no << ", " << flit.src_id << "-->" << flit.dst_id << "]";
     }
 //**************************NN-Noxim*********************************

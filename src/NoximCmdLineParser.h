@@ -12,6 +12,7 @@
 #define __NOXIMCMDLINEPARSER_H__
 
 #include "NoximMain.h"
+
 using namespace std;
 
 void parseCmdLine(int arg_num, char *arg_vet[]);

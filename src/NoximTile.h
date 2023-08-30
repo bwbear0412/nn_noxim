@@ -57,7 +57,7 @@ SC_MODULE(NoximTile) {
     sc_signal<bool>      req_tx_local;     // The requests associated with the output channels
     sc_signal<bool>      ack_tx_local;     // The outgoing ack signals associated with the output channels
 
-    sc_signal<int> free_slots_local;
+    sc_signal<int> free_slots_local;       // The
     sc_signal<int> free_slots_neighbor_local;
 
     // Instances
@@ -71,6 +71,7 @@ SC_MODULE(NoximTile) {
         r = new NoximRouter("Router");
         r->clock(clock);
         r->reset(reset);
+
         for(i = 0; i < DIRECTIONS; i++) {
             r->flit_rx[i](flit_rx[i]);
             r->req_rx[i](req_rx[i]);

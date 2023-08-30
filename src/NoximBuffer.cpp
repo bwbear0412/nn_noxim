@@ -10,83 +10,76 @@
 
 #include "NoximBuffer.h"
 
-NoximBuffer::NoximBuffer()
-{
+NoximBuffer::NoximBuffer() {
     SetMaxBufferSize(DEFAULT_BUFFER_DEPTH);
 }
 
-void NoximBuffer::SetMaxBufferSize(const unsigned int bms)
-{
+void NoximBuffer::SetMaxBufferSize(const unsigned int bms) {
     assert(bms > 0);
 
     max_buffer_size = bms;
 }
 
-unsigned int NoximBuffer::GetMaxBufferSize() const
-{
+unsigned int NoximBuffer::GetMaxBufferSize() const {
     return max_buffer_size;
 }
 
-bool NoximBuffer::IsFull() const
-{
+bool NoximBuffer::IsFull() const {
     return buffer.size() == max_buffer_size;
 }
 
-bool NoximBuffer::IsEmpty() const
-{
+bool NoximBuffer::IsEmpty() const {
     return buffer.size() == 0;
 }
 
-void NoximBuffer::Drop(const NoximFlit & flit) const
-{
+void NoximBuffer::Drop(const NoximFlit &flit) const {
     assert(false);
 }
 
-void NoximBuffer::Empty() const
-{
+void NoximBuffer::Empty() const {
     assert(false);
 }
 
-void NoximBuffer::Push(const NoximFlit & flit)
-{
-    if (IsFull())
-	Drop(flit);
-    else
-	buffer.push(flit);
+void NoximBuffer::Push(const NoximFlit &flit) {
+    if(IsFull()) {
+        Drop(flit);
+    }
+    else {
+        buffer.push(flit);
+    }
 }
 
-NoximFlit NoximBuffer::Pop()
-{
+NoximFlit NoximBuffer::Pop() {
     NoximFlit f;
 
-    if (IsEmpty())
-	Empty();
+    if(IsEmpty()) {
+        Empty();
+    }
     else {
-	f = buffer.front();
-	buffer.pop();
+        f = buffer.front();
+        buffer.pop();
     }
 
     return f;
 }
 
-NoximFlit NoximBuffer::Front() const
-{
+NoximFlit NoximBuffer::Front() const {
     NoximFlit f;
 
-    if (IsEmpty())
-	Empty();
-    else
-	f = buffer.front();
+    if(IsEmpty()) {
+        Empty();
+    }
+    else {
+        f = buffer.front();
+    }
 
     return f;
 }
 
-unsigned int NoximBuffer::Size() const
-{
+unsigned int NoximBuffer::Size() const {
     return buffer.size();
 }
 
-unsigned int NoximBuffer::getCurrentFreeSlots() const
-{
+unsigned int NoximBuffer::getCurrentFreeSlots() const {
     return (GetMaxBufferSize() - Size());
 }

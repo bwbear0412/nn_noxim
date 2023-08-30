@@ -10,12 +10,13 @@
 
 #include "NoximRouter.h"
 
+// 收数据
 void NoximRouter::rxProcess() {
     int i, j, k;
     if(reset.read()) {
         // Clear outputs and indexes of receiving protocol
         for(i = 0; i < DIRECTIONS + 1; i++) {
-            //ack_rx[i].write(0);
+            // ack_rx[i].write(0);
             ack_rx[i].write(1);
             current_level_rx[i] = 0;
         }
@@ -35,55 +36,50 @@ void NoximRouter::rxProcess() {
         /*******DOWNWARD ROUTING******/
         for(i = 0; i < 4; i++) {
             if(DW_tag_neighbor[i].read() < DW_tag_cur && DW_tag_neighbor[i].read() >= 0) {
-                //DW level propagation: 匡拒綟﹡┪DW_tag耕ê																																								 //暗穝DW level (匡穦NW saturation)
-//					cout<<"["<<local_id<<"]DW_tag: "<<DW_tag_cur<<"->"<<DW_tag_neighbor[i].read()<<endl;
+                // DW level propagation: 																																						 //暗穝DW level (匡穦NW saturation)
+                // cout << "[" << local_id << "]DW_tag: " << DW_tag_cur << "->" << DW_tag_neighbor[i].read() << endl;
                 DW_tag_cur = DW_tag_neighbor[i].read();
-                for(j      = 0; j < 4; j++) {
+
+                for(j = 0; j < 4; j++) {
                     DW_tag[j].write(DW_tag_cur);
                 }
             }
         }
         /*******DOWNWARD ROUTING******/
+
         // For each channel decide if a new flit can be accepted
         //
         // This process simply sees a flow of incoming flits. All arbitration
         // and wormhole related issues are addressed in the txProcess()
-
         for(i = 0; i < DIRECTIONS + 1; i++) {
             // To accept a new flit, the following conditions must match:
             //
             // 1) there is an incoming request
             // 2) there is a free slot in the input buffer of direction i
-
-            //if ((req_rx[i].read() == 1 - current_level_rx[i])&& !buffer[i].IsFull()) {
+            // if((req_rx[i].read() == 1 - current_level_rx[i]) && !buffer[i].IsFull()) {
             if((req_rx[i].read() == 1) && ack_rx[i].read() == 1) {
-                if((i != DIRECTION_LOCAL && !throttle_neighbor) || i == DIRECTION_LOCAL)        //check throttling
-//#endif
-                {
+                // check throttling
+                if((i != DIRECTION_LOCAL && !throttle_neighbor) || i == DIRECTION_LOCAL) {
                     NoximFlit received_flit = flit_rx[i].read();
-
                     if(NoximGlobalParams::verbose_mode > VERBOSE_OFF) {
-                        cout << getCurrentCycleNum() << ": Router[" << local_id << "], Input[" << i
-                             << "], Received flit: " << received_flit << endl;
+                        cout << getCurrentCycleNum() << ": Router[" << local_id << "], Input[" << i << "], Received flit: " << received_flit << endl;
                     }
                     // Store the incoming flit in the circular buffer
                     buffer[i].Push(received_flit);
 
                     // Negate the old value for Alternating Bit Protocol (ABP)
-                    //current_level_rx[i] = 1 - current_level_rx[i];
+                    // current_level_rx[i] = 1 - current_level_rx[i];
 
                     // Incoming flit
                     if(i != DIRECTION_UP && i != DIRECTION_DOWN) {
                         stats.power.Msint();
                         stats.power.QueuesNDataPath();
                         stats.power.Clocking();
-                        //stats.power.Incoming();
+                        // stats.power.Incoming();
                     }
-
-
                 }
             }
-            //ack_rx[i].write(current_level_rx[i]);
+            // ack_rx[i].write(current_level_rx[i]);
             ack_rx[i].write((!buffer[i].IsFull()) && (!throttle_neighbor));
         }
     }
@@ -91,10 +87,11 @@ void NoximRouter::rxProcess() {
         stats.power.LeakageRouter();
         stats.power.LeakageFPMAC();
         stats.power.LeakageMEM();
-        //stats.power.Standby();
+        // stats.power.Standby();
     }
 }
 
+// 发数据
 void NoximRouter::txProcess() {
     if(reset.read()) {
         // Clear outputs and indexes of transmitting protocol
@@ -106,6 +103,7 @@ void NoximRouter::txProcess() {
     else {
         // 1st phase: Reservation
         for(int j = 0; j < DIRECTIONS + 1; j++) {
+            // start_from_port是6, 这个6代表什么意思？
             int i = (start_from_port + j) % (DIRECTIONS + 1);
 
             if(!buffer[i].IsEmpty()) {
@@ -214,15 +212,12 @@ void NoximRouter::txProcess() {
     //stats.power.Standby();
 }
 
-
 NoximNoP_data NoximRouter::getCurrentNoPData() const {
     NoximNoP_data NoP_data;
 
     for(int j = 0; j < DIRECTIONS; j++) {
-        NoP_data.channel_status_neighbor[j].free_slots =
-                free_slots_neighbor[j].read();
-        NoP_data.channel_status_neighbor[j].available =
-                (reservation_table.isAvailable(j));
+        NoP_data.channel_status_neighbor[j].free_slots = free_slots_neighbor[j].read();
+        NoP_data.channel_status_neighbor[j].available  = (reservation_table.isAvailable(j));
     }
 
     NoP_data.sender_id = local_id;
@@ -365,14 +360,12 @@ void NoximRouter::NoP_report() const {
 }
 
 void NoximRouter::RCA_Aggregation() {
-    int i, j;
+    // int i, j;
     if(reset.read()) {
-        for(i = 0; i < DIRECTIONS; i++) {
+        for(int i = 0; i < DIRECTIONS; i++) {
             monitor_out[i].write(0);
         }
-
         buffer_util = 0;
-
     }
     else {
         NoximCoord position = id2Coord(local_id);
@@ -381,11 +374,9 @@ void NoximRouter::RCA_Aggregation() {
             throt_in[j] = monitor_in[j].read();
         }
 
-        /*for(i=0; i < DIRECTIONS; i++) {
-            monitor_out[i].write((stats.last_temperature - stats.temperature));
-
-        }*/
-
+        // for(int i = 0; i < DIRECTIONS; i++) {
+        //     monitor_out[i].write((stats.last_temperature - stats.temperature));
+        // }
 
         int self_throt;
         if(emergency) {
@@ -395,10 +386,9 @@ void NoximRouter::RCA_Aggregation() {
             self_throt = 0;
         }
 
-
         double  throt_out[DIRECTIONS];
         for(int j = 0; j < DIRECTIONS; j++) {
-            if((throt_in[j] != 0) || (self_throt != 0)) { //OR gate for throttling awareness
+            if((throt_in[j] != 0) || (self_throt != 0)) { // OR gate for throttling awareness
                 throt_out[j] = 1;
             }
             else {
@@ -411,7 +401,7 @@ void NoximRouter::RCA_Aggregation() {
         monitor_out[DIRECTION_EAST].write(throt_out[DIRECTION_WEST]);
         monitor_out[DIRECTION_WEST].write(throt_out[DIRECTION_EAST]);
 
-        //cout<<getCurrentCycleNum()<<endl;
+        // cout << getCurrentCycleNum() << endl;
         double total_size = 0;
         buffer_used = 0;
         for(int j = 0; j < 4; j++) {
@@ -419,15 +409,14 @@ void NoximRouter::RCA_Aggregation() {
             total_size += buffer[j].GetMaxBufferSize();
         }
         buffer_util += buffer_used / total_size;
-        //cout<<"("<<position.x<<", "<<position.y<<", "<<position.z<<"): "<<buffer_util<<endl;
+        // cout << "(" << position.x << ", " << position.y << ", " << position.z << "): " << buffer_util << endl;
     }
 
 
 }
 //---------------------------------------------------------------------------
 
-int NoximRouter::NoPScore(const NoximNoP_data &nop_data,
-                          const vector<int> &nop_channels) const {
+int NoximRouter::NoPScore(const NoximNoP_data &nop_data, const vector<int> &nop_channels) const {
     int score = 0;
     /***UNKNOWN***/
     if(NoximGlobalParams::verbose_mode == -58) {
@@ -476,9 +465,9 @@ int NoximRouter::NoPScore(const NoximNoP_data &nop_data,
         temp_decision        = temp_decision + 2;
         double tune_ratio = 0.66;
         int    max_buff   = buffer[nop_channels[i]].GetMaxBufferSize();
-        score += not_throttle * available * free_slots; //traffic-&throttling-aware
+        score += not_throttle * available * free_slots; // traffic-&throttling-aware
         /***UNKNOWN***/
-        //score += available * free_slots;
+        // score += available * free_slots;
     }
 
     return score;
@@ -488,137 +477,133 @@ int NoximRouter::NoPScore(const NoximNoP_data &nop_data,
 int NoximRouter::RCA_selection(const vector<int> &directions, const NoximRouteData &route_data) {
     vector<int> best_dirs;
     int         max_score = 0;
-    /*
-    //cout<< directions.size()<<endl;
-
-    for (unsigned int i=0; i<directions.size(); i++)
-    {
-        if(RCA_QUADRO == 0){
-            double RCA_Sel = RCA_select[directions[i]];
-            bool available = reservation_table.isAvailable(directions[i]);
-
-            if (RCA_Sel > max_score)
-                {
-                    max_score = RCA_Sel;
-                    best_dirs.clear();
-                    best_dirs.push_back(directions[i]);
-                }
-            else if (RCA_Sel == max_score)
-                best_dirs.push_back(directions[i]);
-        }
-        else if(RCA_QUADRO == 1){
-            NoximCoord current_coord = id2Coord(route_data.current_id);
-            NoximCoord dst_coord = id2Coord(route_data.dst_id);
-
-            int e0, e1;
-
-            e0 = dst_coord.x - current_coord.x;
-            e1 = dst_coord.y - current_coord.y;
-
-            if(directions[i] == DIRECTION_NORTH) {
-                if(e0 > 0) {//Go East
-                    if (RCA_Sel_Q2 > max_score)
-                        {
-                            max_score = RCA_Sel_Q2;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q2 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-                else{//Go West
-                    if (RCA_Sel_Q1 > max_score)
-                        {
-                            max_score = RCA_Sel_Q1;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q1 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-            }
-            else if(directions[i] == DIRECTION_SOUTH) {
-                if(e0 > 0) {//Go East
-                    if (RCA_Sel_Q1 > max_score)
-                        {
-                            max_score = RCA_Sel_Q1;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q1 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-                else{//Go West
-                    if (RCA_Sel_Q2 > max_score)
-                        {
-                            max_score = RCA_Sel_Q2;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q2 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-            }
-            else if(directions[i] == DIRECTION_WEST){
-                if(e1 > 0) {//Go South
-                    if (RCA_Sel_Q1 > max_score)
-                        {
-                            max_score = RCA_Sel_Q1;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q1 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-                else{//Go North
-                    if (RCA_Sel_Q2 > max_score)
-                        {
-                            max_score = RCA_Sel_Q2;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q2 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-            }
-            else if(directions[i] == DIRECTION_EAST){
-                if(e1 > 0) {//Go South
-                    if (RCA_Sel_Q2 > max_score)
-                        {
-                            max_score = RCA_Sel_Q2;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q2 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-                else{//Go North
-                    if (RCA_Sel_Q1 > max_score)
-                        {
-                            max_score = RCA_Sel_Q1;
-                            best_dirs.clear();
-                            best_dirs.push_back(directions[i]);
-                        }
-                    else if (RCA_Sel_Q1 == max_score)
-                        best_dirs.push_back(directions[i]);
-                }
-            }
-        }
-    }
-
-    //cout<< best_dirs.size()<<endl;
-
-    if (best_dirs.size())
-        return(best_dirs[rand() % best_dirs.size()]);
-    else
-    {
-        /*for (unsigned int i=0; i<directions.size(); i++)
-        {
-            cout<<RCA_select[directions[i]]<<endl;
-        }
-        return(directions[rand() % directions.size()]);
-    }
-    */
+    // // cout << directions.size() << endl;
+    //
+    // for(unsigned int i = 0; i < directions.size(); i++) {
+    //     if(RCA_QUADRO == 0) {
+    //         double RCA_Sel   = RCA_select[directions[i]];
+    //         bool   available = reservation_table.isAvailable(directions[i]);
+    //
+    //         if(RCA_Sel > max_score) {
+    //             max_score = RCA_Sel;
+    //             best_dirs.clear();
+    //             best_dirs.push_back(directions[i]);
+    //         }
+    //         else if(RCA_Sel == max_score) {
+    //             best_dirs.push_back(directions[i]);
+    //         }
+    //     }
+    //     else if(RCA_QUADRO == 1) {
+    //         NoximCoord current_coord = id2Coord(route_data.current_id);
+    //         NoximCoord dst_coord     = id2Coord(route_data.dst_id);
+    //
+    //         int e0, e1;
+    //
+    //         e0 = dst_coord.x - current_coord.x;
+    //         e1 = dst_coord.y - current_coord.y;
+    //
+    //         if(directions[i] == DIRECTION_NORTH) {
+    //             if(e0 > 0) {//Go East
+    //                 if(RCA_Sel_Q2 > max_score) {
+    //                     max_score = RCA_Sel_Q2;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q2 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //             else {//Go West
+    //                 if(RCA_Sel_Q1 > max_score) {
+    //                     max_score = RCA_Sel_Q1;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q1 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //         }
+    //         else if(directions[i] == DIRECTION_SOUTH) {
+    //             if(e0 > 0) { //Go East
+    //                 if(RCA_Sel_Q1 > max_score) {
+    //                     max_score = RCA_Sel_Q1;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q1 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //             else { //Go West
+    //                 if(RCA_Sel_Q2 > max_score) {
+    //                     max_score = RCA_Sel_Q2;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q2 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //         }
+    //         else if(directions[i] == DIRECTION_WEST) {
+    //             if(e1 > 0) { //Go South
+    //                 if(RCA_Sel_Q1 > max_score) {
+    //                     max_score = RCA_Sel_Q1;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q1 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //             else { //Go North
+    //                 if(RCA_Sel_Q2 > max_score) {
+    //                     max_score = RCA_Sel_Q2;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q2 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //         }
+    //         else if(directions[i] == DIRECTION_EAST) {
+    //             if(e1 > 0) { //Go South
+    //                 if(RCA_Sel_Q2 > max_score) {
+    //                     max_score = RCA_Sel_Q2;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q2 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //             else { //Go North
+    //                 if(RCA_Sel_Q1 > max_score) {
+    //                     max_score = RCA_Sel_Q1;
+    //                     best_dirs.clear();
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //                 else if(RCA_Sel_Q1 == max_score) {
+    //                     best_dirs.push_back(directions[i]);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    //
+    // // cout << best_dirs.size() << endl;
+    //
+    // if(best_dirs.size()) {
+    //     return (best_dirs[rand() % best_dirs.size()]);
+    // }
+    // else {
+    //     for(unsigned int i = 0; i < directions.size(); i++) {
+    //         cout << RCA_select[directions[i]] << endl;
+    //     }
+    //     return (directions[rand() % directions.size()]);
+    // }
     return (directions[rand() % directions.size()]);
 }
 
@@ -715,40 +700,37 @@ int NoximRouter::selectionBufferLevel(const vector<int> &directions) {
     //-------------------------
     // TODO: unfair if multiple directions have same buffer level
     // TODO: to check when both available
-//   unsigned int max_free_slots = 0;
-//   int direction_choosen = NOT_VALID;
-
-//   for (unsigned int i=0;i<directions.size();i++)
-//     {
-//       int free_slots = free_slots_neighbor[directions[i]].read();
-//       if ((free_slots >= max_free_slots) &&
-//        (reservation_table.isAvailable(directions[i])))
-//      {
-//        direction_choosen = directions[i];
-//        max_free_slots = free_slots;
-//      }
-//     }
-
-//   // No available channel 
-//   if (direction_choosen==NOT_VALID)
-//     direction_choosen = directions[rand() % directions.size()]; 
-
-//   if(NoximGlobalParams::verbose_mode>VERBOSE_OFF)
-//     {
-//       NoximChannelStatus tmp;
-
-//       cout << getCurrentCycleNum() << ": Router[" << local_id << "] SELECTION between: " << endl;
-//       for (unsigned int i=0;i<directions.size();i++)
-//      {
-//        tmp.free_slots = free_slots_neighbor[directions[i]].read();
-//        tmp.available = (reservation_table.isAvailable(directions[i]));
-//        cout << "    -> direction " << directions[i] << ", channel status: " << tmp << endl;
-//      }
-//       cout << " direction choosen: " << direction_choosen << endl;
-//     }
-
-//   assert(direction_choosen>=0);
-//   return direction_choosen;
+    // unsigned int max_free_slots    = 0;
+    // int          direction_choosen = NOT_VALID;
+    //
+    // for(unsigned int i = 0; i < directions.size(); i++) {
+    //     int free_slots = free_slots_neighbor[directions[i]].read();
+    //     if((free_slots >= max_free_slots) &&
+    //        (reservation_table.isAvailable(directions[i]))) {
+    //         direction_choosen = directions[i];
+    //         max_free_slots    = free_slots;
+    //     }
+    // }
+    //
+    // // No available channel
+    // if(direction_choosen == NOT_VALID) {
+    //     direction_choosen = directions[rand() % directions.size()];
+    // }
+    //
+    // if(NoximGlobalParams::verbose_mode > VERBOSE_OFF) {
+    //     NoximChannelStatus tmp;
+    //
+    //     cout << getCurrentCycleNum() << ": Router[" << local_id << "] SELECTION between: " << endl;
+    //     for(unsigned int i = 0; i < directions.size(); i++) {
+    //         tmp.free_slots = free_slots_neighbor[directions[i]].read();
+    //         tmp.available  = (reservation_table.isAvailable(directions[i]));
+    //         cout << "    -> direction " << directions[i] << ", channel status: " << tmp << endl;
+    //     }
+    //     cout << " direction choosen: " << direction_choosen << endl;
+    // }
+    //
+    // assert(direction_choosen >= 0);
+    // return direction_choosen;
 }
 
 int NoximRouter::selectionRandom(const vector<int> &directions) {
@@ -1479,28 +1461,23 @@ vector<int> NoximRouter::routingCrossLayer_HS(const int select_routing, const No
 }
 
 //---------------------------------------------------------------------------
-
 vector<int> NoximRouter::routingDownward_CrossLayer_HS(const NoximCoord &current, const NoximCoord &destination, const NoximCoord &source) {
 
 
     vector<int> directions;
-    int         layer = 3;    //ボpacket莱赣layer暗XY肚患
-
+    int         layer = 3;
 
 
     if(current.z < layer && (current.x != destination.x || current.y != destination.y)) {
         directions.push_back(DIRECTION_DOWN);
     }
-    else if(current.z >= layer && (current.x != destination.x || current.y != destination.y))    //┏场xy routing肚
-    {
-        directions = routingXYZ(current, destination);     //Matthew:  directions = routingXYZ(current, destination)		                                                         //セdownward routingノXY 硂柑ノwestfirst
+    else if(current.z >= layer && (current.x != destination.x || current.y != destination.y)) {
+        directions = routingXYZ(current, destination);
     }
-    else if((current.x == destination.x && current.y == destination.y) && current.z > destination.z)    //xy, zよ┕肚
-    {
+    else if((current.x == destination.x && current.y == destination.y) && current.z > destination.z) {
         directions.push_back(DIRECTION_UP);
     }
-    else if((current.x == destination.x && current.y == destination.y) && current.z < destination.z)  //xy, zよ┕肚
-    {
+    else if((current.x == destination.x && current.y == destination.y) && current.z < destination.z) {
         directions.push_back(DIRECTION_DOWN);
     }
     else {
